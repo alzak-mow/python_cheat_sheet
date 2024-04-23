@@ -21,3 +21,20 @@ sql_query = pd.read_sql_query(query, cnxn)
 
 df = pd.DataFrame(sql_query)
 df
+
+##для проверки на NULL стандарт предлагает более короткую форму — оператор COALESCE
+query = '''
+SELECT DISTINCT Product.model,
+ COALESCE(CAST(price AS CHAR(20)),'Нет в наличии') price
+FROM Product LEFT JOIN
+ PC ON Product.model = PC.model
+WHERE Product.type = 'pc';'''
+
+
+##Использование CASE с агрегатной функцией - NULLIF
+query = '''
+SELECT COUNT(*) total_qty, 
+COUNT(NULLIF(town_to, 'Moscow')) non_moscow
+FROM Trip
+WHERE town_from='Rostov';
+'''
